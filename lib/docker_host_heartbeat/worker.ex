@@ -6,7 +6,7 @@ defmodule DockerHostHeartbeat.Worker do
   end
 
   def init(:ok) do
-    docker_proxy = System.getenv("DOCKER_PROXY_HOST") || "127.0.0.1:4000"
+    docker_proxy = System.get_env("DOCKER_PROXY_HOST") || Application.get_env(:docker_proxy, :host)
     {:ok, resp } = HTTPoison.post("127.0.0.1:4000/hosts", Poison.encode!(%{name: with_port(listening_ip)}), %{"content-type" => "application/json"})
     {:ok, Poison.decode(resp.body)}
   end
