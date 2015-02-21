@@ -10,14 +10,17 @@ It requires system environment variables during start
 Port that Docker is listening on
 
 ```bash
-ENV[DOCKER_PORT] = 14443
+DOCKER_PORT=14443
 ```
 
 The interface Docker API is listening on
 ```bash
-ENV[DOCKER_INTERFACE] = "eth0"
+DOCKER_INTERFACE="eth0"
 ```
-
+The address to Docker API Proxy
+```bash
+DOCKER_API_PROXY="127.0.0.1:4000"
+```
 ```bash
 cd docker_host_heartbeat
 mix run --no-halt
@@ -26,8 +29,8 @@ mix run --no-halt
 
 ### TODO
 
-- [] Use the env variable
-- [] Phone home every 15 seconds
-- [] Tests
+- [ ] Use the env variable
+- [ ] Phone home every 15 seconds
+- [ ] Tests
 
 
