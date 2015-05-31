@@ -15,11 +15,11 @@ DOCKER_PORT=14443
 
 The interface Docker API is listening on
 ```bash
-DOCKER_INTERFACE="eth0"
+DOCKER_HOST_INTERFACE=192.168.4.4
 ```
 The address to Docker API Proxy
 ```bash
-DOCKER_API_PROXY="127.0.0.1:4000"
+DOCKER_API_PROXY_HOST="127.0.0.1:4000"
 ```
 ```bash
 cd docker_host_heartbeat

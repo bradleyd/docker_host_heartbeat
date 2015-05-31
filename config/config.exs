@@ -21,5 +21,5 @@ use Mix.Config
 # Configuration from the imported file will override the ones defined
 # here (which is why it is important to import them last).
 #
-#     import_config "#{Mix.env}.exs"
 config :docker_proxy, :host, "127.0.0.1:4000"
+import_config "config.#{Mix.env}.exs"
