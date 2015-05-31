@@ -17,7 +17,7 @@ defmodule DockerHostHeartbeat.Worker do
   def handle_info(:register, state) do
     IO.puts("Received register message with state: #{inspect(state)}")
     result =
-    case HTTPoison.post(docker_api_proxy_host <> "/hosts", Poison.encode!(%{name: with_port(interface), hosts: 1}), %{"content-type" => "application/json"}) do
+    case HTTPoison.post(docker_api_proxy_host <> "/hosts", Poison.encode!(%{name: with_port(interface), heartbeat_interval: heartbeat_interval}), %{"content-type" => "application/json"}) do
       {:ok, resp} ->
         {:ok, Poison.decode(resp.body)}
       {:error, error} ->
