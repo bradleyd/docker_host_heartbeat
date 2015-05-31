@@ -1,5 +1,5 @@
 %{"conform": {:hex, :conform, "0.13.0"},
-  "exrm": {:hex, :exrm, "0.15.3"},
+  "exrm": {:hex, :exrm, "0.16.0"},
   "hackney": {:hex, :hackney, "1.0.6"},
   "httpoison": {:hex, :httpoison, "0.6.2"},
   "idna": {:hex, :idna, "1.0.2"},

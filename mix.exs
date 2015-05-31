@@ -32,7 +32,7 @@ defmodule DockerHostHeartbeat.Mixfile do
   defp deps do
     [
       { :httpoison, "~> 0.6" },
-      { :exrm, "~> 0.15.3"},
+      { :exrm, "~> 0.15"},
       { :poison, "~> 1.3"}
     ]
   end

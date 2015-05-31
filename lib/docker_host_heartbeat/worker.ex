@@ -6,53 +6,48 @@ defmodule DockerHostHeartbeat.Worker do
   end
 
   def init(:ok) do
-    :gen_server.cast self, {:register}
+    :erlang.send(self(), :register)
     {:ok, []}
   end
 
-  def loop({:error, error}) do
-    IO.inspect error
-  end
-  
-  def loop({:ok, body}) do
-    IO.inspect body
+  """
+  Register with docker api proxy
+  Will keep trying for `heartbeat_interval` milliseconds
+  """
+  def handle_info(:register, state) do
+    IO.puts("Received register message with state: #{inspect(state)}")
+    result =
     case HTTPoison.post(docker_api_proxy_host <> "/hosts", Poison.encode!(%{name: with_port(interface), hosts: 1}), %{"content-type" => "application/json"}) do
       {:ok, resp} ->
-        result = {:ok, Poison.decode(resp.body)}
-        :timer.sleep(heartbeat_interval) 
-        loop(result)
+        {:ok, Poison.decode(resp.body)}
       {:error, error} ->
-        loop({:error, error})
+        {:error, error}
     end
+    :erlang.send_after(heartbeat_interval, self(), :register)
+    {:noreply, result}
   end
-  
+
   def handle_info(info, state) do
     IO.puts("Received info message #{inspect(info)}")
     {:noreply, state}
   end
 
-  def handle_cast({:register}, []) do
-   {:ok, resp } = HTTPoison.post(docker_api_proxy_host <> "/hosts", Poison.encode!(%{name: with_port(interface)}), %{"content-type" => "application/json"})
-   result = {:ok, Poison.decode(resp.body)}
-   loop(result)
-  end
-  
   def get_token do
     GenServer.call(__MODULE__, {:token})
   end
-  
+
   defp interface do
     System.get_env("DOCKER_HOST_INTERFACE") 
   end
-  
+
   defp docker_api_proxy_host do
     System.get_env("DOCKER_API_PROXY_HOST") || Application.get_env(:docker_proxy, :host)
   end
-  
+
   defp heartbeat_interval do
-    String.to_integer(System.get_env("HEARTBEAT_INTERVAL") || 600000)
+    String.to_integer(System.get_env("HEARTBEAT_INTERVAL") || "600000")
   end
-  
+
   def listening_ip do
     {:ok, ip} = :inet.getifaddrs
     ip_address(ip)
@@ -61,7 +56,7 @@ defmodule DockerHostHeartbeat.Worker do
   defp ip_address([head|tail]) do
     ip_address(tail, elem(head, 0))    
   end
-  
+
   defp ip_address([head|tail], interface) do
     ip_address(head, elem(head, 0))
   end
@@ -81,6 +76,4 @@ defmodule DockerHostHeartbeat.Worker do
   def with_port(ip) do
     to_string(ip) <> ":14443"
   end
-  
- 
 end
