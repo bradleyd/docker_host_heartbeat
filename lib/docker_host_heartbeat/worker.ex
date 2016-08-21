@@ -41,7 +41,7 @@ defmodule DockerHostHeartbeat.Worker do
   end
 
   defp docker_api_proxy_host do
-    System.get_env("DOCKER_API_PROXY_HOST") || Application.get_env(:docker_proxy, :host)
+    System.get_env("DOCKER_API_PROXY_HOST") || Application.get_env(:docker_api_proxy, :host)
   end
 
   defp heartbeat_interval do

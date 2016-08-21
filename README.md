@@ -26,11 +26,12 @@ cd docker_host_heartbeat
 mix run --no-halt
 ```
 
+```
+HEARTBEAT_INTERVAL=60000 DOCKER_API_PROXY_HOST=192.168.4.4:4000 DOCKER_HOST_INTERFACE=192.168.4.4 iex -S mix
+```
 
 ### TODO
 
 - [ ] Use the env variable
 - [ ] Phone home every 15 seconds
 - [ ] Tests
-
-
